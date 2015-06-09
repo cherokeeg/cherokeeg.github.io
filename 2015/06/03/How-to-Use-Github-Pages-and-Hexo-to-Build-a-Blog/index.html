@@ -1,0 +1,237 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>How to Use GitHub Pages and Hexo to Build a Blog | Newborn</title>
+  <meta name="author" content="Cherokee G">
+  
+  <meta name="description" content="1. Install Nodejs, npm and GitIn Mac, download Nodejs and Git from their offical website. And Nodejs contains npm already.https://nodejs.orghttps://gi">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="How to Use GitHub Pages and Hexo to Build a Blog"/>
+  <meta property="og:site_name" content="Newborn"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Newborn" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">Newborn</a></h1>
+  <h2><a href="/"></a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div></header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2015-06-03T06:11:56.000Z"><a href="/2015/06/03/How-to-Use-Github-Pages-and-Hexo-to-Build-a-Blog/">2015-06-03</a></time>
+      
+      
+  
+    <h1 class="title">How to Use GitHub Pages and Hexo to Build a Blog</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h3 id="1-_Install_Nodejs,_npm_and_Git">1. Install Nodejs, npm and Git</h3><p>In Mac, download Nodejs and Git from their offical website. And Nodejs contains npm already.<br><a href="https://nodejs.org" target="_blank" rel="external">https://nodejs.org</a><br><a href="https://git-scm.com" target="_blank" rel="external">https://git-scm.com</a><br>In Ubuntu you can install by apt-get.<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ apt-get install nodejs</span><br><span class="line">$ apt-get install npm</span><br><span class="line">$ apt-get install git</span><br></pre></td></tr></table></figure></p>
+<h3 id="2-_Install_Hexo">2. Install Hexo</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
+<p>I want to use GitHub for remote host, so also need to install this plugin:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure></p>
+<h3 id="3-_Setup_Hexo">3. Setup Hexo</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ hexo init &#123;folder&#125;</span><br><span class="line">$ <span class="built_in">cd</span> &#123;folder&#125;</span><br><span class="line">$ npm install</span><br></pre></td></tr></table></figure>
+<h3 id="4-_Configuration">4. Configuration</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ vi _config.yml</span><br><span class="line"><span class="comment"># Deployment</span></span><br><span class="line"><span class="comment">## Docs: http://hexo.io/docs/deployment.html</span></span><br><span class="line">deploy:</span><br><span class="line">  <span class="built_in">type</span>: git</span><br><span class="line">  repo: https://github.com/&#123;username&#125;/&#123;username&#125;.github.io.git</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
+<h3 id="5-_Start_for_a_test">5. Start for a test</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<p>Visit <a href="http://{your" target="_blank" rel="external">http://{your</a> IP address}:4000/ in your browser. If everything is OK, you will see it.</p>
+<h3 id="6-_Deploy_to_remote_GitHub">6. Deploy to remote GitHub</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ git config --global user.name <span class="string">"&#123;username&#125;"</span></span><br><span class="line">$ git config --global user.email <span class="string">"&#123;email&#125;"</span></span><br><span class="line">$ git config --global credential.helper store</span><br><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<p>The 3rd line configure makes git remember your username and password.<br>Visit <a href="http://{username}.github.io/" target="_blank" rel="external">http://{username}.github.io/</a> for test.</p>
+<h3 id="7-_Create_a_new_post">7. Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
+<h3 id="8-_Generate">8. Generate</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+<h3 id="9-_Deploy_the_new_post_again">9. Deploy the new post again</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<p>OK, It’s done. Next time I will show you how to config a Hexo blog.</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+  
+  <div class="tags">
+    <a href="/tags/GitHub/">GitHub</a>, <a href="/tags/Hexo/">Hexo</a>
+  </div>
+
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+      <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+    
+    
+      <a class="addthis_button_tweet"></a>
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+      <a class="addthis_button_pinterest_pinit" pi:pinit:layout="horizontal"></a>
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+<section id="comment">
+  <h1 class="title">留言</h1>
+
+  
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+  
+</section>
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:cherokeeg.github.io">
+  </form>
+</div>
+
+  
+
+  
+<div class="widget tag">
+  <h3 class="title">标签</h3>
+  <ul class="entry">
+  
+    <li><a href="/tags/CSS/">CSS</a><small>1</small></li>
+  
+    <li><a href="/tags/GitHub/">GitHub</a><small>1</small></li>
+  
+    <li><a href="/tags/Hexo/">Hexo</a><small>4</small></li>
+  
+  </ul>
+</div>
+
+
+  
+<div class="widget tagcloud">
+  <h3 class="title">标签云</h3>
+  <div class="entry">
+    <a href="/tags/CSS/" style="font-size: 10px;">CSS</a> <a href="/tags/GitHub/" style="font-size: 10px;">GitHub</a> <a href="/tags/Hexo/" style="font-size: 20px;">Hexo</a>
+  </div>
+</div>
+
+
+  
+  
+  
+  <div class="widget tag">
+    <h3 class="title">归档</h3>
+	<ul class="entry">
+	  
+        
+        <li><a href="/archives/2015/06/">六月 2015</a><small>5</small></li>
+      
+    </ul>
+  </div>
+
+
+  
+<div class="widget tag">
+  <h3 class="title">最新文章</h3>
+  <ul class="entry">
+    
+      <li>
+        <a href="/2015/06/09/如何将评论加入-Hexo/">如何将评论加入 Hexo</a>
+      </li>
+    
+      <li>
+        <a href="/2015/06/09/A-CSS-Problem/">A CSS Problem</a>
+      </li>
+    
+      <li>
+        <a href="/2015/06/03/How-to-Config-a-Hexo-Blog/">How to Config a Hexo Blog</a>
+      </li>
+    
+      <li>
+        <a href="/2015/06/03/How-to-Use-Github-Pages-and-Hexo-to-Build-a-Blog/">How to Use GitHub Pages and Hexo to Build a Blog</a>
+      </li>
+    
+      <li>
+        <a href="/2015/06/03/hello-world/">Hello World</a>
+      </li>
+    
+  </ul>
+</div>
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2015 Cherokee G
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+<script type="text/javascript">
+var disqus_shortname = 'cherokeeg';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>
