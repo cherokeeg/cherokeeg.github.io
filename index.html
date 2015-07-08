@@ -3,21 +3,21 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Newborn</title>
+  <title>Newborn, Nymph</title>
   <meta name="author" content="Cherokee G">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   
-  <meta property="og:site_name" content="Newborn"/>
+  <meta property="og:site_name" content="Newborn, Nymph"/>
 
   
     <meta property="og:image" content="undefined"/>
   
 
   <link href="/favicon.png" rel="icon">
-  <link rel="alternate" href="/atom.xml" title="Newborn" type="application/atom+xml">
+  <link rel="alternate" href="/atom.xml" title="Newborn, Nymph" type="application/atom+xml">
   <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
   <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
   
@@ -27,7 +27,7 @@
 
 <body>
   <header id="header" class="inner"><div class="alignleft">
-  <h1><a href="/">Newborn</a></h1>
+  <h1><a href="/">Newborn, Nymph</a></h1>
   <h2><a href="/">Cherokee G&#39;s Blog</a></h2>
 </div>
 <nav id="main-nav" class="alignright">
@@ -49,17 +49,87 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2015-06-18T05:01:11.000Z"><a href="/2015/06/18/如何生成阿里云-OSS-访问控制签名/">2015-06-18</a></time>
+        <time datetime="2015-07-08T11:16:07.000Z"><a href="/2015/07/08/400-bad-request-from-aliyun-oss-with-xutils/">2015-07-08</a></time>
       
       
   
-    <h1 class="title"><a href="/2015/06/18/如何生成阿里云-OSS-访问控制签名/">如何生成阿里云 OSS 访问控制签名</a></h1>
+    <h1 class="title"><a href="/2015/07/08/400-bad-request-from-aliyun-oss-with-xutils/">使用 xUtils 上传文件至阿里云 OSS 时遇到的错误</a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>最近项目为降低运维成本，采用了阿里云的 OSS、RDS、SLB。其他服务对开发来讲已足够傻瓜，要点三十二个赞。相对来讲只有 OSS 还有点门槛，但没办法，存储业务使然。<br>我们通过 JS 来上传文件到 OSS，采用 PostObject。因为控制访问（只读或读写都限制的情况），Post 时需要带上 policy 和 Signature。但是这里官方文档有些歧义，没明确说明用于生成 Signature 的 policy 字符串是否是需要 base64 加密，也没有附带例子要自己试错，没人性啊就算是 5 分钟，用户的时间也是时间啊。PD 偷懒了啊，要知道文档写得好，老婆不会跑啊。云计算是一把手项目，看来此言非虚。<br>另外因为 RFC2045 规定了 base64 一行不超过 76 个字符（也有可能不到 76 个就换行的），生成 Signature 时要注意把换行符去掉。<br>还有注意时区要用 GMT。</p>
+        <p>项目中使用 <a href="https://github.com/wyouflf/xUtils" target="_blank" rel="external">xUtils</a>，在上传 OSS 时遇到问题，参数全都正确，OSS 服务器却返回“400 Bad request”错误。<br>用 Fiddler 比对正常的请求，发现上传失败时的 RequestBody 中每一项，除了文件 <code>file</code> 以外，都多了 <code>Content-Type: text/plain; charset=UTF-8</code> 和 <code>Content-Transfer-Encoding: 8bit</code> 这两个值。<br>阿里云 OSS 服务端返回的 ErrorCode：<code>400</code> <code>MalformedPOSTRequest</code> “Post 请求的 body 格式非法”。</p>
+<p>尝试移除上述两个参数后，上传请求被正常接受。<br>/src/com/lidroid/xutils/http/client/multipart/FormBodyPart.java<br><figure class="highlight d"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br></pre></td><td class="code"><pre><span class="line">/</span><br><span class="line"><span class="keyword">package</span> com.lidroid.xutils.http.client.multipart;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.lidroid.xutils.http.client.multipart.content.ContentBody;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> FormBodyPart &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String name;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> MinimalFieldHeader header;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> ContentBody <span class="keyword">body</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> FormBodyPart(<span class="keyword">final</span> String name, <span class="keyword">final</span> ContentBody <span class="keyword">body</span>) &#123;</span><br><span class="line">        <span class="keyword">super</span>();</span><br><span class="line">        <span class="keyword">if</span> (name == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Name may not be null"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">body</span> == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Body may not be null"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">        <span class="keyword">this</span>.<span class="keyword">body</span> = <span class="keyword">body</span>;</span><br><span class="line">        <span class="keyword">this</span>.header = <span class="keyword">new</span> MinimalFieldHeader();</span><br><span class="line"></span><br><span class="line">        generateContentDisposition(<span class="keyword">body</span>);</span><br><span class="line">        generateContentType(<span class="keyword">body</span>);</span><br><span class="line"><span class="comment">//        generateTransferEncoding(body); // 注释掉，不然无法上传到OSS。</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> FormBodyPart(<span class="keyword">final</span> String name, <span class="keyword">final</span> ContentBody <span class="keyword">body</span>, <span class="keyword">final</span> String contentDisposition) &#123;</span><br><span class="line">        <span class="keyword">super</span>();</span><br><span class="line">        <span class="keyword">if</span> (name == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Name may not be null"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">body</span> == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Body may not be null"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">        <span class="keyword">this</span>.<span class="keyword">body</span> = <span class="keyword">body</span>;</span><br><span class="line">        <span class="keyword">this</span>.header = <span class="keyword">new</span> MinimalFieldHeader();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (contentDisposition != <span class="literal">null</span>) &#123;</span><br><span class="line">            addField(MIME.CONTENT_DISPOSITION, contentDisposition);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            generateContentDisposition(<span class="keyword">body</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        generateContentType(<span class="keyword">body</span>);</span><br><span class="line"><span class="comment">//        generateTransferEncoding(body); // 注释掉，不然无法上传到OSS。</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> String getName() &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> ContentBody getBody() &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.<span class="keyword">body</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> MinimalFieldHeader getHeader() &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.header;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> addField(<span class="keyword">final</span> String name, <span class="keyword">final</span> String value) &#123;</span><br><span class="line">        <span class="keyword">if</span> (name == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Field name may not be null"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">this</span>.header.addField(<span class="keyword">new</span> MinimalField(name, value));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">void</span> generateContentDisposition(<span class="keyword">final</span> ContentBody <span class="keyword">body</span>) &#123;</span><br><span class="line">        StringBuilder buffer = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">        buffer.append(<span class="string">"form-data; name=\""</span>);</span><br><span class="line">        buffer.append(getName());</span><br><span class="line">        buffer.append(<span class="string">"\""</span>);</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">body</span>.getFilename() != <span class="literal">null</span>) &#123;</span><br><span class="line">            buffer.append(<span class="string">"; filename=\""</span>);</span><br><span class="line">            buffer.append(<span class="keyword">body</span>.getFilename());</span><br><span class="line">            buffer.append(<span class="string">"\""</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        addField(MIME.CONTENT_DISPOSITION, buffer.toString());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">void</span> generateContentType(<span class="keyword">final</span> ContentBody <span class="keyword">body</span>) &#123;</span><br><span class="line">        StringBuilder buffer = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">        buffer.append(<span class="keyword">body</span>.getMimeType()); <span class="comment">// MimeType cannot be null</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">body</span>.getCharset() != <span class="literal">null</span>) &#123; <span class="comment">// charset may legitimately be null</span></span><br><span class="line">            buffer.append(<span class="string">"; charset="</span>);</span><br><span class="line">            buffer.append(<span class="keyword">body</span>.getCharset());</span><br><span class="line">            <span class="keyword">return</span>; <span class="comment">// 如果非空就返回，这样file的ContentType任然是保留的。</span></span><br><span class="line">        &#125;</span><br><span class="line">        addField(MIME.CONTENT_TYPE, buffer.toString());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">void</span> generateTransferEncoding(<span class="keyword">final</span> ContentBody <span class="keyword">body</span>) &#123;</span><br><span class="line">        addField(MIME.CONTENT_TRANSFER_ENC, <span class="keyword">body</span>.getTransferEncoding()); <span class="comment">// TE cannot be null</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>坑了一下午。</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2015-07-08T11:16:07.000Z"><a href="/2015/07/08/阿里云-OSS-使用-xUtils-上传文件的错误/">2015-07-08</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2015/07/08/阿里云-OSS-使用-xUtils-上传文件的错误/">使用 xUtils 上传文件至阿里云 OSS 时遇到的错误</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>项目中使用 <a href="https://github.com/wyouflf/xUtils" target="_blank" rel="external">xUtils</a>，在上传 OSS 时遇到问题，参数全都正确，OSS 服务器却返回“400 Bad request”错误。<br>用 Fiddler 比对正常的请求，发现上传失败时的 RequestBody 中每一项，除了文件 <code>file</code> 以外，都多了 <code>Content-Type: text/plain; charset=UTF-8</code> 和 <code>Content-Transfer-Encoding: 8bit</code> 这两项。文件还是需要 <code>Content-Type: image/png</code>。<br>阿里云 OSS 服务端返回的 ErrorCode：<code>400</code> <code>MalformedPOSTRequest</code> “Post 请求的 body 格式非法”。</p>
+<p>尝试移除上述两个参数后，上传请求被正常接受。<br>/src/com/lidroid/xutils/http/client/multipart/FormBodyPart.java<br><figure class="highlight d"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.lidroid.xutils.http.client.multipart;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.lidroid.xutils.http.client.multipart.content.ContentBody;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> FormBodyPart &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String name;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> MinimalFieldHeader header;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> ContentBody <span class="keyword">body</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> FormBodyPart(<span class="keyword">final</span> String name, <span class="keyword">final</span> ContentBody <span class="keyword">body</span>) &#123;</span><br><span class="line">        <span class="keyword">super</span>();</span><br><span class="line">        <span class="keyword">if</span> (name == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Name may not be null"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">body</span> == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Body may not be null"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">        <span class="keyword">this</span>.<span class="keyword">body</span> = <span class="keyword">body</span>;</span><br><span class="line">        <span class="keyword">this</span>.header = <span class="keyword">new</span> MinimalFieldHeader();</span><br><span class="line"></span><br><span class="line">        generateContentDisposition(<span class="keyword">body</span>);</span><br><span class="line">        generateContentType(<span class="keyword">body</span>);</span><br><span class="line"><span class="comment">//        generateTransferEncoding(body); // 注释掉，不然无法上传到OSS。</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> FormBodyPart(<span class="keyword">final</span> String name, <span class="keyword">final</span> ContentBody <span class="keyword">body</span>, <span class="keyword">final</span> String contentDisposition) &#123;</span><br><span class="line">        <span class="keyword">super</span>();</span><br><span class="line">        <span class="keyword">if</span> (name == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Name may not be null"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">body</span> == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Body may not be null"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">        <span class="keyword">this</span>.<span class="keyword">body</span> = <span class="keyword">body</span>;</span><br><span class="line">        <span class="keyword">this</span>.header = <span class="keyword">new</span> MinimalFieldHeader();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (contentDisposition != <span class="literal">null</span>) &#123;</span><br><span class="line">            addField(MIME.CONTENT_DISPOSITION, contentDisposition);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            generateContentDisposition(<span class="keyword">body</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        generateContentType(<span class="keyword">body</span>);</span><br><span class="line"><span class="comment">//        generateTransferEncoding(body); // 注释掉，不然无法上传到OSS。</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> String getName() &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> ContentBody getBody() &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.<span class="keyword">body</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> MinimalFieldHeader getHeader() &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.header;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> addField(<span class="keyword">final</span> String name, <span class="keyword">final</span> String value) &#123;</span><br><span class="line">        <span class="keyword">if</span> (name == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Field name may not be null"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">this</span>.header.addField(<span class="keyword">new</span> MinimalField(name, value));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">void</span> generateContentDisposition(<span class="keyword">final</span> ContentBody <span class="keyword">body</span>) &#123;</span><br><span class="line">        StringBuilder buffer = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">        buffer.append(<span class="string">"form-data; name=\""</span>);</span><br><span class="line">        buffer.append(getName());</span><br><span class="line">        buffer.append(<span class="string">"\""</span>);</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">body</span>.getFilename() != <span class="literal">null</span>) &#123;</span><br><span class="line">            buffer.append(<span class="string">"; filename=\""</span>);</span><br><span class="line">            buffer.append(<span class="keyword">body</span>.getFilename());</span><br><span class="line">            buffer.append(<span class="string">"\""</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        addField(MIME.CONTENT_DISPOSITION, buffer.toString());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">void</span> generateContentType(<span class="keyword">final</span> ContentBody <span class="keyword">body</span>) &#123;</span><br><span class="line">        StringBuilder buffer = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">        buffer.append(<span class="keyword">body</span>.getMimeType()); <span class="comment">// MimeType cannot be null</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">body</span>.getCharset() != <span class="literal">null</span>) &#123; <span class="comment">// charset may legitimately be null</span></span><br><span class="line">            buffer.append(<span class="string">"; charset="</span>);</span><br><span class="line">            buffer.append(<span class="keyword">body</span>.getCharset());</span><br><span class="line">            <span class="keyword">return</span>; <span class="comment">// 如果非空就返回，这样file的ContentType任然是保留的。</span></span><br><span class="line">        &#125;</span><br><span class="line">        addField(MIME.CONTENT_TYPE, buffer.toString());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">void</span> generateTransferEncoding(<span class="keyword">final</span> ContentBody <span class="keyword">body</span>) &#123;</span><br><span class="line">        addField(MIME.CONTENT_TRANSFER_ENC, <span class="keyword">body</span>.getTransferEncoding()); <span class="comment">// TE cannot be null</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>四时坑。</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2015-06-18T05:01:11.000Z"><a href="/2015/06/18/how-to-generate-access-control-signature-for-aliyun-oss/">2015-06-18</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2015/06/18/how-to-generate-access-control-signature-for-aliyun-oss/">如何生成阿里云 OSS 访问控制签名</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>最近项目为降低运维成本，采用了阿里云的 OSS、RDS、SLB。其他服务对开发来讲已足够傻瓜，要点三十二个赞。相对来讲只有 OSS 还有点门槛，但没办法，存储业务使然。<br>我们通过 JS 来上传文件到 OSS，采用 PostObject。因为控制访问（只读或读写都限制的情况），Post 时需要带上 policy 和 Signature。但是这里官方文档有些歧义，没明确说明用于生成 Signature 的 policy 字符串是否是需要 base64 加密，也没有附带例子要自己试错，没人性啊就算是 5 分钟，用户的时间也是时间啊。PD 偷懒了啊，要知道文档写得好，老婆不会跑啊。云计算是一把手项目，看来此言非虚。<br>另外因为 RFC2045 规定了 Base64 一行最长 76 个字符（也有可能 64 个字就换行的哦），生成 Signature 时要注意把换行符去掉。<br>还有注意时区要用 GMT。</p>
 <h3 id="Java_实现">Java 实现</h3><figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> StorageAccessTokenDo generateStorageAccessToken(<span class="keyword">String</span> fileName, Integer userId,</span><br><span class="line">                                                           Integer expireSeconds) &#123;</span><br><span class="line">        <span class="comment">// 默认600秒后过期</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">null</span> == expireSeconds || expireSeconds &lt; <span class="number">0</span>) &#123;</span><br><span class="line">            expireSeconds = <span class="number">600</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 获得GMT时间</span></span><br><span class="line">        TimeZone defaultTimeZone = TimeZone.getDefault();</span><br><span class="line">        TimeZone gmtTimeZone = TimeZone.getTimeZone(<span class="string">"GMT"</span>);</span><br><span class="line">        TimeZone.setDefault(gmtTimeZone);</span><br><span class="line">        Calendar calendar = Calendar.getInstance(gmtTimeZone);</span><br><span class="line">        calendar.<span class="built_in">add</span>(Calendar.SECOND, expireSeconds);</span><br><span class="line">        Date expire = calendar.getTime();</span><br><span class="line">        TimeZone.setDefault(defaultTimeZone);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 开始组装policy</span></span><br><span class="line">        <span class="keyword">String</span> expiration = DateUtils.formatDateTime(DateUtils.nextSecond(expire),</span><br><span class="line">                <span class="string">"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"</span>);</span><br><span class="line">        <span class="keyword">String</span> policyOrigin = <span class="string">"&#123;\"expiration\": \""</span> + expiration</span><br><span class="line">                + <span class="string">"\", \"conditions\": [&#123;\"bucket\": \""</span> + bucketName + <span class="string">"\"&#125;]&#125;"</span>;</span><br><span class="line">        <span class="keyword">String</span> policy = base64Encode(policyOrigin.getBytes());</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 生成签名</span></span><br><span class="line">        <span class="keyword">String</span> signature = getSignature(policy.getBytes(), accessKeySecret.getBytes());</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 生成key（含目录路径） </span></span><br><span class="line">        <span class="keyword">String</span> <span class="variable">key</span> = DateUtils.formatDateDirectory(<span class="keyword">new</span> Date()) + userId + <span class="string">"/"</span> + fileName;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 返回storageAccessToken</span></span><br><span class="line">        StorageAccessTokenDo sat = <span class="keyword">new</span> StorageAccessTokenDo(accessKeyId, policy, signature, <span class="variable">key</span>);</span><br><span class="line">        <span class="keyword">return</span> sat;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span><br><span class="line">     * base64加密</span><br><span class="line">     * </span><br><span class="line">     * @param origin</span><br><span class="line">     * @return</span><br><span class="line">     */</span></span><br><span class="line">    @SuppressWarnings(<span class="string">"restriction"</span>)</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">String</span> base64Encode(<span class="built_in">byte</span>[] origin) &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">null</span> == origin) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> sun.misc.BASE64Encoder().encode(origin).replace(<span class="string">"\n"</span>, <span class="string">""</span>).replace(<span class="string">"\r"</span>, <span class="string">""</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 使用HmacSHA1加密方式生成签名数据</span><br><span class="line">     * </span><br><span class="line">     * @param data</span><br><span class="line">     * @param key</span><br><span class="line">     * @return</span><br><span class="line">     * @throws InvalidKeyException</span><br><span class="line">     * @throws NoSuchAlgorithmException</span><br><span class="line">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">String</span> getSignature(<span class="built_in">byte</span>[] data, <span class="built_in">byte</span>[] <span class="variable">key</span>) &#123;</span><br><span class="line">        SecretKeySpec signingKey = <span class="keyword">new</span> SecretKeySpec(<span class="variable">key</span>, HMAC_SHA1);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Mac mac;</span><br><span class="line">            mac = Mac.getInstance(HMAC_SHA1);</span><br><span class="line">            mac.init(signingKey);</span><br><span class="line">            <span class="built_in">byte</span>[] rawHmac = mac.doFinal(data);</span><br><span class="line">            <span class="keyword">return</span> base64Encode(rawHmac);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (NoSuchAlgorithmException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InvalidKeyException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 <h3 id="Python2_实现">Python2 实现</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">import base64</span><br><span class="line">import hmac</span><br><span class="line">import sha</span><br><span class="line"></span><br><span class="line">accessKeySecret = <span class="string">"NmgYoieU2AC5hnI4tsQq2zRgZvx2Lq"</span></span><br><span class="line"></span><br><span class="line">policy = <span class="string">''</span><span class="string">'&#123;"expiration": "2015-07-01T12:00:00.000Z", "conditions": [&#123;"bucket": "test-bucket"&#125;]&#125;'</span><span class="string">''</span></span><br><span class="line"><span class="function"><span class="title">print</span><span class="params">(<span class="string">'policy = '</span> + base64.encodestring(policy)</span></span>) #注意，<span class="number">76</span> 个字符后会换行</span><br><span class="line"></span><br><span class="line">signature = hmac.<span class="function"><span class="title">new</span><span class="params">(accessKeySecret, base64.encodestring(policy)</span></span>.<span class="function"><span class="title">strip</span><span class="params">()</span></span>.<span class="function"><span class="title">replace</span><span class="params">(<span class="string">"\n"</span>, <span class="string">""</span>)</span></span>, sha)</span><br><span class="line"><span class="function"><span class="title">print</span><span class="params">(<span class="string">'signature = '</span> + base64.encodestring(signature.digest()</span></span>).<span class="function"><span class="title">strip</span><span class="params">()</span></span>)</span><br></pre></td></tr></table></figure>
 
@@ -84,11 +154,11 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2015-06-09T14:49:43.000Z"><a href="/2015/06/09/如何将评论功能加入-Hexo/">2015-06-09</a></time>
+        <time datetime="2015-06-09T14:49:43.000Z"><a href="/2015/06/09/how-to-add-comments-function-in-hexo/">2015-06-09</a></time>
       
       
   
-    <h1 class="title"><a href="/2015/06/09/如何将评论功能加入-Hexo/">如何将评论功能加入 Hexo</a></h1>
+    <h1 class="title"><a href="/2015/06/09/how-to-add-comments-function-in-hexo/">如何将评论功能加入 Hexo</a></h1>
   
 
     </header>
@@ -120,11 +190,11 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2015-06-09T09:24:56.000Z"><a href="/2015/06/09/A-CSS-Problem/">2015-06-09</a></time>
+        <time datetime="2015-06-09T09:24:56.000Z"><a href="/2015/06/09/a-css-problem/">2015-06-09</a></time>
       
       
   
-    <h1 class="title"><a href="/2015/06/09/A-CSS-Problem/">A CSS Problem</a></h1>
+    <h1 class="title"><a href="/2015/06/09/a-css-problem/">A CSS Problem</a></h1>
   
 
     </header>
@@ -154,11 +224,11 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2015-06-03T09:40:55.000Z"><a href="/2015/06/03/How-to-Config-a-Hexo-Blog/">2015-06-03</a></time>
+        <time datetime="2015-06-03T09:40:55.000Z"><a href="/2015/06/03/how-to-config-a-hexo-blog/">2015-06-03</a></time>
       
       
   
-    <h1 class="title"><a href="/2015/06/03/How-to-Config-a-Hexo-Blog/">How to Config a Hexo Blog</a></h1>
+    <h1 class="title"><a href="/2015/06/03/how-to-config-a-hexo-blog/">How to Config a Hexo Blog</a></h1>
   
 
     </header>
@@ -198,11 +268,11 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2015-06-03T06:11:56.000Z"><a href="/2015/06/03/How-to-Use-Github-Pages-and-Hexo-to-Build-a-Blog/">2015-06-03</a></time>
+        <time datetime="2015-06-03T06:11:56.000Z"><a href="/2015/06/03/how-to-use-github-pages-and-hexo-to-build-a-blog/">2015-06-03</a></time>
       
       
   
-    <h1 class="title"><a href="/2015/06/03/How-to-Use-Github-Pages-and-Hexo-to-Build-a-Blog/">How to Use GitHub Pages and Hexo to Build a Blog</a></h1>
+    <h1 class="title"><a href="/2015/06/03/how-to-use-github-pages-and-hexo-to-build-a-blog/">How to Use GitHub Pages and Hexo to Build a Blog</a></h1>
   
 
     </header>
@@ -299,13 +369,17 @@
   <h3 class="title">标签</h3>
   <ul class="entry">
   
+    <li><a href="/tags/Android/">Android</a><small>2</small></li>
+  
     <li><a href="/tags/CSS/">CSS</a><small>1</small></li>
   
     <li><a href="/tags/GitHub/">GitHub</a><small>1</small></li>
   
     <li><a href="/tags/Hexo/">Hexo</a><small>4</small></li>
   
-    <li><a href="/tags/OSS/">OSS</a><small>1</small></li>
+    <li><a href="/tags/OSS/">OSS</a><small>3</small></li>
+  
+    <li><a href="/tags/xUtils/">xUtils</a><small>2</small></li>
   
   </ul>
 </div>
@@ -315,7 +389,7 @@
 <div class="widget tagcloud">
   <h3 class="title">标签云</h3>
   <div class="entry">
-    <a href="/tags/CSS/" style="font-size: 10px;">CSS</a> <a href="/tags/GitHub/" style="font-size: 10px;">GitHub</a> <a href="/tags/Hexo/" style="font-size: 20px;">Hexo</a> <a href="/tags/OSS/" style="font-size: 10px;">OSS</a>
+    <a href="/tags/Android/" style="font-size: 13.33px;">Android</a> <a href="/tags/CSS/" style="font-size: 10px;">CSS</a> <a href="/tags/GitHub/" style="font-size: 10px;">GitHub</a> <a href="/tags/Hexo/" style="font-size: 20px;">Hexo</a> <a href="/tags/OSS/" style="font-size: 16.67px;">OSS</a> <a href="/tags/xUtils/" style="font-size: 13.33px;">xUtils</a>
   </div>
 </div>
 
@@ -327,6 +401,9 @@
     <h3 class="title">归档</h3>
 	<ul class="entry">
 	  
+        
+        <li><a href="/archives/2015/07/">七月 2015</a><small>2</small></li>
+      
         
         <li><a href="/archives/2015/06/">六月 2015</a><small>6</small></li>
       
@@ -340,23 +417,23 @@
   <ul class="entry">
     
       <li>
-        <a href="/2015/06/18/如何生成阿里云-OSS-访问控制签名/">如何生成阿里云 OSS 访问控制签名</a>
+        <a href="/2015/07/08/400-bad-request-from-aliyun-oss-with-xutils/">使用 xUtils 上传文件至阿里云 OSS 时遇到的错误</a>
       </li>
     
       <li>
-        <a href="/2015/06/09/如何将评论功能加入-Hexo/">如何将评论功能加入 Hexo</a>
+        <a href="/2015/07/08/阿里云-OSS-使用-xUtils-上传文件的错误/">使用 xUtils 上传文件至阿里云 OSS 时遇到的错误</a>
       </li>
     
       <li>
-        <a href="/2015/06/09/A-CSS-Problem/">A CSS Problem</a>
+        <a href="/2015/06/18/how-to-generate-access-control-signature-for-aliyun-oss/">如何生成阿里云 OSS 访问控制签名</a>
       </li>
     
       <li>
-        <a href="/2015/06/03/How-to-Config-a-Hexo-Blog/">How to Config a Hexo Blog</a>
+        <a href="/2015/06/09/how-to-add-comments-function-in-hexo/">如何将评论功能加入 Hexo</a>
       </li>
     
       <li>
-        <a href="/2015/06/03/How-to-Use-Github-Pages-and-Hexo-to-Build-a-Blog/">How to Use GitHub Pages and Hexo to Build a Blog</a>
+        <a href="/2015/06/09/a-css-problem/">A CSS Problem</a>
       </li>
     
   </ul>
