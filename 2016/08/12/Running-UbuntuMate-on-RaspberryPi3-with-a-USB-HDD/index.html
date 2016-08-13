@@ -6,6 +6,9 @@
   <title>Running UbuntuMate on RaspberryPi3 with a USB HDD | Newborn, Nymph</title>
   <meta name="author" content="Cherokee G">
   
+  <meta name="description" content="1. Why UbuntuMate?Raspberrypi’s officail support OS is Raspbian, but I find that it is not very well in supporting Chinese charset.
+So I use UbuntuMat">
+  
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -58,13 +61,68 @@
     </header>
     <div class="entry">
       
-        
+        <h3 id="1-_Why_UbuntuMate?">1. Why UbuntuMate?</h3><p>Raspberrypi’s officail support OS is Raspbian, but I find that it is not very well in supporting Chinese charset.</p>
+<p>So I use UbuntuMate 16.04 LTS instead, it seems did more works in international.</p>
+<h3 id="2-_Prepare">2. Prepare</h3><p>First, Download <a href="http://sourceforge.net/projects/win32diskimager/" target="_blank" rel="external">Win32DiskImager</a>, and the UbuntuMate 16.04 image. It only works under Windows10, I tried it on Mac OSX but failed.</p>
+<p>Prepare one USB HDD and one SD card. The SD card needs, not very large, 64M space and above, and mine is 2G.</p>
+<p>When the Raspberrypi is booting, you need to connect the USB HDD and put the SD card in too. It seems a waste but this is the only way I found to run a raspberrypi on UbuntuMate.</p>
+<p>Connect the USB HDD, use Win32DiskImager to copy the UbuntuMate image on the USB HDD. It will makes the disk divide into 3 partitions. And only the first partition is availible on Win10, you can’t see the others two.</p>
+<p>Insert the SD card, copy every file from the HDD to SD card.</p>
+<p>Edit the file “cmdline.txt” on SD card:</p>
+<pre><code>dwc_otg.<span class="variable">lpm_enable=</span><span class="number">0</span> <span class="variable">console=</span>tty1 <span class="variable">root=</span>/dev/mmcblk0p2 <span class="variable">rootfstype=</span>ext4 <span class="variable">elevator=</span>deadline rootwait
+</code></pre><p>Change to:</p>
+<pre><code>dwc_otg.<span class="variable">lpm_enable=</span><span class="number">0</span> <span class="variable">console=</span>tty1 <span class="variable">root=</span>/dev/sda2 <span class="variable">rootfstype=</span>ext4 <span class="variable">elevator=</span>deadline rootwait
+</code></pre><p>Change the “<strong>mmcblk0p2</strong>“ to “<strong>sda2</strong>“, and save.</p>
+<h3 id="3-_Install">3. Install</h3><p>Insert the SD card in and connect the USB HDD on the raspi, and power on. It will starts the UbuntuMate install program if everything goes fine.</p>
+<p>After the UbuntuMate installed, you will find the second partition, we mentioned above, only has 8G space and the rest has gone.</p>
+<p>We need expand the USB HDD’s file system.</p>
+<pre><code>sudo fdisk /dev/sda
+<span class="keyword">d</span>,2
+<span class="keyword">n</span>,2,[Enter],[Enter]
+<span class="literal">w</span>
+
+sudo reboot
+
+sudo resize2fs /dev/sda1
+</code></pre><p>This will makes your HDD have the <strong>full</strong> space in the second partition.</p>
+<h3 id="4-_Shadowsocks">4. Shadowsocks</h3><h5 id="Install_Shadowsocks-Qt5">Install <a href="https://github.com/shadowsocks/shadowsocks-qt5" target="_blank" rel="external">Shadowsocks-Qt5</a></h5><pre><code>sudo<span class="instruction"> add-apt-repository </span>ppa:hzwhuang/ss-qt5
+
+sudo apt-get update
+
+sudo apt-get install shadowsocks-qt5
+</code></pre><h5 id="Start_Shadowsocks-Qt5">Start Shadowsocks-Qt5</h5><h5 id="Install_GenPAC_and_gfwlist-txt">Install GenPAC and gfwlist.txt</h5><pre><code>sudo apt-get <span class="operator"><span class="keyword">install</span> python-pip python-dev build-essential
+
+sudo pip <span class="keyword">install</span> <span class="comment">--upgrade pip</span>
+
+sudo pip <span class="keyword">install</span> <span class="comment">--upgrade virtualenv</span>
+
+sudo pip <span class="keyword">install</span> genpac
+
+cd ~;</span> mkdir shadowsocks; cd shadowsocks
+
+wget http://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt
+
+genpac -p "SOCKS5 127.0.0.1:1080" <span class="comment">--gfwlist-proxy="SOCKS5 127.0.0.1:1080" --output="autoproxy.pac" --gfwlist-local=gfwlist.txt</span>
+</code></pre><h5 id="Add_a_proxy">Add a proxy</h5><p>System -&gt; Perfrence -&gt; Internet and Network -&gt; Network Proxy</p>
+<p>Select Automatic Proxy</p>
+<p>Set Automatic configure URL</p>
+<pre><code><span class="keyword">file</span>:<span class="comment">///home/{USERNAME}/shadowsocks/autoproxy.pac</span>
+</code></pre><h3 id="5-_Ohters">5. Ohters</h3><h5 id="Googlepinyin">Googlepinyin</h5><pre><code>sudo apt-<span class="keyword">get</span> install fcitx fcitx-googlepinyin
+</code></pre><h5 id="Mysql">Mysql</h5><pre><code>sudo apt-<span class="built_in">get</span> install mysql-server
+sudo <span class="keyword">vi</span> /etc/mysql/mysql.<span class="keyword">conf</span>.<span class="keyword">d</span>/mysqld.<span class="keyword">cnf</span>
+</code></pre><p>Remember, comment bind-address = 127.0.0.1 using the # symbol</p>
+<h3 id="6-_Finish">6. Finish</h3>
       
     </div>
     <footer>
       
         
         
+  
+  <div class="tags">
+    <a href="/tags/Raspberrypi/">Raspberrypi</a>, <a href="/tags/UbuntuMate/">UbuntuMate</a>
+  </div>
+
         
   <div class="addthis addthis_toolbox addthis_default_style">
     
@@ -126,6 +184,10 @@
   
     <li><a href="/tags/OSS/">OSS</a><small>2</small></li>
   
+    <li><a href="/tags/Raspberrypi/">Raspberrypi</a><small>1</small></li>
+  
+    <li><a href="/tags/UbuntuMate/">UbuntuMate</a><small>1</small></li>
+  
     <li><a href="/tags/xUtils/">xUtils</a><small>1</small></li>
   
     <li><a href="/tags/工具/">工具</a><small>1</small></li>
@@ -138,7 +200,7 @@
 <div class="widget tagcloud">
   <h3 class="title">标签云</h3>
   <div class="entry">
-    <a href="/tags/Android/" style="font-size: 10px;">Android</a> <a href="/tags/CSS/" style="font-size: 10px;">CSS</a> <a href="/tags/GitHub/" style="font-size: 10px;">GitHub</a> <a href="/tags/Hexo/" style="font-size: 20px;">Hexo</a> <a href="/tags/OSS/" style="font-size: 15px;">OSS</a> <a href="/tags/xUtils/" style="font-size: 10px;">xUtils</a> <a href="/tags/工具/" style="font-size: 10px;">工具</a>
+    <a href="/tags/Android/" style="font-size: 10px;">Android</a> <a href="/tags/CSS/" style="font-size: 10px;">CSS</a> <a href="/tags/GitHub/" style="font-size: 10px;">GitHub</a> <a href="/tags/Hexo/" style="font-size: 20px;">Hexo</a> <a href="/tags/OSS/" style="font-size: 15px;">OSS</a> <a href="/tags/Raspberrypi/" style="font-size: 10px;">Raspberrypi</a> <a href="/tags/UbuntuMate/" style="font-size: 10px;">UbuntuMate</a> <a href="/tags/xUtils/" style="font-size: 10px;">xUtils</a> <a href="/tags/工具/" style="font-size: 10px;">工具</a>
   </div>
 </div>
 
