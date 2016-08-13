@@ -103,9 +103,9 @@ cd ~;</span> mkdir shadowsocks; cd shadowsocks
 wget http://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt
 
 genpac -p "SOCKS5 127.0.0.1:1080" <span class="comment">--gfwlist-proxy="SOCKS5 127.0.0.1:1080" --output="autoproxy.pac" --gfwlist-local=gfwlist.txt</span>
-</code></pre><h5 id="Add_a_proxy">Add a proxy</h5><p>System -&gt; Perfrence -&gt; Internet and Network -&gt; Network Proxy</p>
+</code></pre><h5 id="Add_a_proxy">Add a proxy</h5><p>System -&gt; Preference -&gt; Internet and Network -&gt; Network Proxy</p>
 <p>Select Automatic Proxy</p>
-<p>Set Automatic configure URL</p>
+<p>Set Automatic configure URL as:</p>
 <pre><code><span class="keyword">file</span>:<span class="comment">///home/{USERNAME}/shadowsocks/autoproxy.pac</span>
 </code></pre><h3 id="5-_Ohters">5. Ohters</h3><h5 id="Googlepinyin">Googlepinyin</h5><pre><code>sudo apt-<span class="keyword">get</span> install fcitx fcitx-googlepinyin
 </code></pre><h5 id="Mysql">Mysql</h5><pre><code>sudo apt-<span class="built_in">get</span> install mysql-server
