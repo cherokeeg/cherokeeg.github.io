@@ -60,6 +60,98 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2016-08-17T10:01:55.000Z"><a href="/2016/08/17/installing-owncloud-on-ubuntumate-raspberrypi/">2016-08-17</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/08/17/installing-owncloud-on-ubuntumate-raspberrypi/">Installing OwnCloud on UbuntuMate RaspberryPi</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h2 id="OS_environment:">OS environment:</h2><pre><code>uname -<span class="tag">a</span>
+Linux raspberrypi <span class="number">4.1</span>.<span class="number">19</span>-v7+ <span class="hexcolor">#858</span> SMP Tue Mar <span class="number">15</span> <span class="number">15</span>:<span class="number">56</span>:<span class="number">00</span> GMT <span class="number">2016</span> armv7l armv7l armv7l GNU/Linux
+
+cat /etc/issue
+Ubuntu <span class="number">16.04</span>.<span class="number">1</span> LTS \n \l
+</code></pre><h3 id="Install_LAMP_on_the_UbuntuMate">Install LAMP on the UbuntuMate</h3><pre><code>sudo apt-get <span class="operator"><span class="keyword">install</span> php
+sudo apt-<span class="keyword">get</span> <span class="keyword">install</span> apache2
+sudo apt-<span class="keyword">get</span> <span class="keyword">install</span> libapache2-<span class="keyword">mod</span>-php
+sudo apt-<span class="keyword">get</span> <span class="keyword">install</span> php-gd
+sudo apt-<span class="keyword">get</span> <span class="keyword">install</span> php-json
+sudo apt-<span class="keyword">get</span> <span class="keyword">install</span> php-mysql
+sudo apt-<span class="keyword">get</span> <span class="keyword">install</span> php-curl
+sudo apt-<span class="keyword">get</span> <span class="keyword">install</span> php-intl
+sudo apt-<span class="keyword">get</span> <span class="keyword">install</span> php-mcrypt
+sudo apt-<span class="keyword">get</span> <span class="keyword">install</span> php-imagick
+sudo apt-<span class="keyword">get</span> <span class="keyword">install</span> php-zip
+sudo apt-<span class="keyword">get</span> <span class="keyword">install</span> php-dom
+sudo apt-<span class="keyword">get</span> <span class="keyword">install</span> php-mbstring
+sudo apt-<span class="keyword">get</span> <span class="keyword">install</span> mysql-<span class="keyword">server</span></span>
+</code></pre><h3 id="Get_the_archive_file">Get the archive file</h3><pre><code>wget <span class="string">https:</span><span class="comment">//download.owncloud.org/community/owncloud-9.1.0.zip</span>
+unzip owncloud-<span class="number">9.1</span>.0.zip
+</code></pre><h3 id="Deploy_apache_and_configure">Deploy apache and configure</h3><pre><code>sudo cp -r owncloud <span class="regexp">/var/</span>www
+sudo nano <span class="regexp">/etc/</span>apache2<span class="regexp">/sites-available/</span>owncloud.conf
+</code></pre><hr>
+<pre><code><span class="keyword">Alias</span> /owncloud <span class="string">"/var/www/owncloud/"</span>
+
+<span class="tag">&lt;Directory /var/www/owncloud/&gt;</span>
+  <span class="keyword"><span class="common">Options</span></span> +FollowSymlinks
+  <span class="keyword">AllowOverride</span> <span class="literal">All</span>
+
+ <span class="tag">&lt;IfModule mod_dav.c&gt;</span>
+  <span class="keyword">Dav</span> <span class="literal">off</span>
+ <span class="tag">&lt;/IfModule&gt;</span>
+
+ <span class="keyword"><span class="common">SetEnv</span></span> HOME /var/www/owncloud
+ <span class="keyword"><span class="common">SetEnv</span></span> HTTP_HOME /var/www/owncloud
+ <span class="keyword">Satisfy</span> Any
+<span class="tag">&lt;/Directory&gt;</span>
+</code></pre><hr>
+<pre><code>sudo ln -s <span class="regexp">/etc/</span>apache2<span class="regexp">/sites-available/</span>owncloud.conf <span class="regexp">/etc/</span>apache2<span class="regexp">/sites-enabled/</span>owncloud.conf
+
+sudo a2enmod rewrite
+sudo a2enmod headers
+sudo a2enmod env
+sudo a2enmod dir
+sudo a2enmod mime
+
+sudo chown -R www-<span class="string">data:</span>www-data <span class="regexp">/var/</span>www<span class="regexp">/owncloud/</span>
+</code></pre><h3 id="Start_service">Start service</h3><pre><code>sudo <span class="keyword">service</span> apache2 <span class="literal">restart</span>
+</code></pre><h3 id="Finish_the_installation">Finish the installation</h3><p>Open the url “<em><a href="http://**{your_machine_host}**/owncloud/" target="_blank" rel="external">http://**{your_machine_host}**/owncloud/</a></em>“ with a browser and type below.</p>
+<p>Administrator info:</p>
+<pre><code><span class="attribute">user</span>: <span class="string">  admin</span>
+<span class="attribute">password</span>: <span class="string">  admin</span>
+</code></pre><p>Data dir info:</p>
+<pre><code><span class="regexp">/var/</span>www<span class="regexp">/owncloud/</span>data
+</code></pre><p>Database info:</p>
+<pre><code><span class="attribute">user</span>: <span class="string">  root (only root required)</span>
+<span class="attribute">password</span>: <span class="string">  root</span>
+<span class="attribute">database</span>: <span class="string">  owncloud</span>
+<span class="attribute">host</span>: <span class="string">  localhost</span>
+</code></pre><h3 id="Finish!">Finish!</h3>
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2016-08-13T04:23:54.000Z"><a href="/2016/08/13/running-ubuntumate-on-raspberrypi3-with-a-usb-disk/">2016-08-13</a></time>
       
       
@@ -343,11 +435,11 @@ sudo <span class="keyword">vi</span> /etc/mysql/mysql.<span class="keyword">conf
     <header>
       
         <div class="icon"></div>
-        <time datetime="2015-06-03T09:40:55.000Z"><a href="/2015/06/03/how-to-config-a-hexo-blog/">2015-06-03</a></time>
+        <time datetime="2015-06-03T09:40:55.000Z"><a href="/2015/06/03/How-to-Config-a-Hexo-Blog/">2015-06-03</a></time>
       
       
   
-    <h1 class="title"><a href="/2015/06/03/how-to-config-a-hexo-blog/">How to Config a Hexo Blog</a></h1>
+    <h1 class="title"><a href="/2015/06/03/How-to-Config-a-Hexo-Blog/">How to Config a Hexo Blog</a></h1>
   
 
     </header>
@@ -387,11 +479,11 @@ sudo <span class="keyword">vi</span> /etc/mysql/mysql.<span class="keyword">conf
     <header>
       
         <div class="icon"></div>
-        <time datetime="2015-06-03T06:11:56.000Z"><a href="/2015/06/03/how-to-use-github-pages-and-hexo-to-build-a-blog/">2015-06-03</a></time>
+        <time datetime="2015-06-03T06:11:56.000Z"><a href="/2015/06/03/How-to-Use-Github-Pages-and-Hexo-to-Build-a-Blog/">2015-06-03</a></time>
       
       
   
-    <h1 class="title"><a href="/2015/06/03/how-to-use-github-pages-and-hexo-to-build-a-blog/">How to Use GitHub Pages and Hexo to Build a Blog</a></h1>
+    <h1 class="title"><a href="/2015/06/03/How-to-Use-Github-Pages-and-Hexo-to-Build-a-Blog/">How to Use GitHub Pages and Hexo to Build a Blog</a></h1>
   
 
     </header>
@@ -498,9 +590,13 @@ sudo <span class="keyword">vi</span> /etc/mysql/mysql.<span class="keyword">conf
   
     <li><a href="/tags/OSS/">OSS</a><small>2</small></li>
   
+    <li><a href="/tags/OwnCloud/">OwnCloud</a><small>1</small></li>
+  
+    <li><a href="/tags/RaspberryPi/">RaspberryPi</a><small>1</small></li>
+  
     <li><a href="/tags/Raspberrypi/">Raspberrypi</a><small>1</small></li>
   
-    <li><a href="/tags/UbuntuMate/">UbuntuMate</a><small>1</small></li>
+    <li><a href="/tags/UbuntuMate/">UbuntuMate</a><small>2</small></li>
   
     <li><a href="/tags/xUtils/">xUtils</a><small>1</small></li>
   
@@ -514,7 +610,7 @@ sudo <span class="keyword">vi</span> /etc/mysql/mysql.<span class="keyword">conf
 <div class="widget tagcloud">
   <h3 class="title">标签云</h3>
   <div class="entry">
-    <a href="/tags/Android/" style="font-size: 10px;">Android</a> <a href="/tags/CSS/" style="font-size: 10px;">CSS</a> <a href="/tags/GitHub/" style="font-size: 10px;">GitHub</a> <a href="/tags/Hexo/" style="font-size: 20px;">Hexo</a> <a href="/tags/OSS/" style="font-size: 15px;">OSS</a> <a href="/tags/Raspberrypi/" style="font-size: 10px;">Raspberrypi</a> <a href="/tags/UbuntuMate/" style="font-size: 10px;">UbuntuMate</a> <a href="/tags/xUtils/" style="font-size: 10px;">xUtils</a> <a href="/tags/工具/" style="font-size: 10px;">工具</a>
+    <a href="/tags/Android/" style="font-size: 10px;">Android</a> <a href="/tags/CSS/" style="font-size: 10px;">CSS</a> <a href="/tags/GitHub/" style="font-size: 10px;">GitHub</a> <a href="/tags/Hexo/" style="font-size: 20px;">Hexo</a> <a href="/tags/OSS/" style="font-size: 15px;">OSS</a> <a href="/tags/OwnCloud/" style="font-size: 10px;">OwnCloud</a> <a href="/tags/RaspberryPi/" style="font-size: 10px;">RaspberryPi</a> <a href="/tags/Raspberrypi/" style="font-size: 10px;">Raspberrypi</a> <a href="/tags/UbuntuMate/" style="font-size: 15px;">UbuntuMate</a> <a href="/tags/xUtils/" style="font-size: 10px;">xUtils</a> <a href="/tags/工具/" style="font-size: 10px;">工具</a>
   </div>
 </div>
 
@@ -527,7 +623,7 @@ sudo <span class="keyword">vi</span> /etc/mysql/mysql.<span class="keyword">conf
 	<ul class="entry">
 	  
         
-        <li><a href="/archives/2016/08/">八月 2016</a><small>1</small></li>
+        <li><a href="/archives/2016/08/">八月 2016</a><small>2</small></li>
       
         
         <li><a href="/archives/2015/07/">七月 2015</a><small>2</small></li>
@@ -545,6 +641,10 @@ sudo <span class="keyword">vi</span> /etc/mysql/mysql.<span class="keyword">conf
   <ul class="entry">
     
       <li>
+        <a href="/2016/08/17/installing-owncloud-on-ubuntumate-raspberrypi/">Installing OwnCloud on UbuntuMate RaspberryPi</a>
+      </li>
+    
+      <li>
         <a href="/2016/08/13/running-ubuntumate-on-raspberrypi3-with-a-usb-disk/">Running UbuntuMate on Raspberrypi3 with a USB disk</a>
       </li>
     
@@ -558,10 +658,6 @@ sudo <span class="keyword">vi</span> /etc/mysql/mysql.<span class="keyword">conf
     
       <li>
         <a href="/2015/06/18/how-to-generate-access-control-signature-for-aliyun-oss/">如何生成阿里云 OSS 访问控制签名</a>
-      </li>
-    
-      <li>
-        <a href="/2015/06/09/how-to-add-comments-function-in-hexo/">如何将评论功能加入 Hexo</a>
       </li>
     
   </ul>
