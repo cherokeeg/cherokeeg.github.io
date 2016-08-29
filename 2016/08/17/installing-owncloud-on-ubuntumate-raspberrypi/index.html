@@ -75,46 +75,46 @@ Ubuntu 16.04">
     </header>
     <div class="entry">
       
-        <h2 id="OS_environment:">OS environment:</h2><pre><code>uname -<span class="tag">a</span>
-Linux raspberrypi <span class="number">4.1</span>.<span class="number">19</span>-v7+ <span class="hexcolor">#858</span> SMP Tue Mar <span class="number">15</span> <span class="number">15</span>:<span class="number">56</span>:<span class="number">00</span> GMT <span class="number">2016</span> armv7l armv7l armv7l GNU/Linux
+        <h2 id="OS-environment"><a href="#OS-environment" class="headerlink" title="OS environment:"></a>OS environment:</h2><pre><code>uname -a
+Linux raspberrypi 4.1.19-v7+ #858 SMP Tue Mar 15 15:56:00 GMT 2016 armv7l armv7l armv7l GNU/Linux
 
 cat /etc/issue
-Ubuntu <span class="number">16.04</span>.<span class="number">1</span> LTS \n \l
-</code></pre><h3 id="Install_LAMP_on_the_UbuntuMate">Install LAMP on the UbuntuMate</h3><pre><code>sudo apt-get <span class="operator"><span class="keyword">install</span> php
-sudo apt-<span class="keyword">get</span> <span class="keyword">install</span> apache2
-sudo apt-<span class="keyword">get</span> <span class="keyword">install</span> libapache2-<span class="keyword">mod</span>-php
-sudo apt-<span class="keyword">get</span> <span class="keyword">install</span> php-gd
-sudo apt-<span class="keyword">get</span> <span class="keyword">install</span> php-json
-sudo apt-<span class="keyword">get</span> <span class="keyword">install</span> php-mysql
-sudo apt-<span class="keyword">get</span> <span class="keyword">install</span> php-curl
-sudo apt-<span class="keyword">get</span> <span class="keyword">install</span> php-intl
-sudo apt-<span class="keyword">get</span> <span class="keyword">install</span> php-mcrypt
-sudo apt-<span class="keyword">get</span> <span class="keyword">install</span> php-imagick
-sudo apt-<span class="keyword">get</span> <span class="keyword">install</span> php-zip
-sudo apt-<span class="keyword">get</span> <span class="keyword">install</span> php-dom
-sudo apt-<span class="keyword">get</span> <span class="keyword">install</span> php-mbstring
-sudo apt-<span class="keyword">get</span> <span class="keyword">install</span> mysql-<span class="keyword">server</span></span>
-</code></pre><h3 id="Get_the_archive_file">Get the archive file</h3><pre><code>wget <span class="string">https:</span><span class="comment">//download.owncloud.org/community/owncloud-9.1.0.zip</span>
-unzip owncloud-<span class="number">9.1</span>.0.zip
-</code></pre><h3 id="Deploy_apache_and_configure">Deploy apache and configure</h3><pre><code>sudo cp -r owncloud <span class="regexp">/var/</span>www
-sudo nano <span class="regexp">/etc/</span>apache2<span class="regexp">/sites-available/</span>owncloud.conf
+Ubuntu 16.04.1 LTS \n \l
+</code></pre><h3 id="Install-LAMP-on-the-UbuntuMate"><a href="#Install-LAMP-on-the-UbuntuMate" class="headerlink" title="Install LAMP on the UbuntuMate"></a>Install LAMP on the UbuntuMate</h3><pre><code>sudo apt-get install php
+sudo apt-get install apache2
+sudo apt-get install libapache2-mod-php
+sudo apt-get install php-gd
+sudo apt-get install php-json
+sudo apt-get install php-mysql
+sudo apt-get install php-curl
+sudo apt-get install php-intl
+sudo apt-get install php-mcrypt
+sudo apt-get install php-imagick
+sudo apt-get install php-zip
+sudo apt-get install php-dom
+sudo apt-get install php-mbstring
+sudo apt-get install mysql-server
+</code></pre><h3 id="Get-the-archive-file"><a href="#Get-the-archive-file" class="headerlink" title="Get the archive file"></a>Get the archive file</h3><pre><code>wget https://download.owncloud.org/community/owncloud-9.1.0.zip
+unzip owncloud-9.1.0.zip
+</code></pre><h3 id="Deploy-apache-and-configure"><a href="#Deploy-apache-and-configure" class="headerlink" title="Deploy apache and configure"></a>Deploy apache and configure</h3><pre><code>sudo cp -r owncloud /var/www
+sudo nano /etc/apache2/sites-available/owncloud.conf
 </code></pre><hr>
-<pre><code><span class="keyword">Alias</span> /owncloud <span class="string">"/var/www/owncloud/"</span>
+<pre><code>Alias /owncloud &quot;/var/www/owncloud/&quot;
 
-<span class="tag">&lt;Directory /var/www/owncloud/&gt;</span>
-  <span class="keyword"><span class="common">Options</span></span> +FollowSymlinks
-  <span class="keyword">AllowOverride</span> <span class="literal">All</span>
+&lt;Directory /var/www/owncloud/&gt;
+  Options +FollowSymlinks
+  AllowOverride All
 
- <span class="tag">&lt;IfModule mod_dav.c&gt;</span>
-  <span class="keyword">Dav</span> <span class="literal">off</span>
- <span class="tag">&lt;/IfModule&gt;</span>
+ &lt;IfModule mod_dav.c&gt;
+  Dav off
+ &lt;/IfModule&gt;
 
- <span class="keyword"><span class="common">SetEnv</span></span> HOME /var/www/owncloud
- <span class="keyword"><span class="common">SetEnv</span></span> HTTP_HOME /var/www/owncloud
- <span class="keyword">Satisfy</span> Any
-<span class="tag">&lt;/Directory&gt;</span>
+ SetEnv HOME /var/www/owncloud
+ SetEnv HTTP_HOME /var/www/owncloud
+ Satisfy Any
+&lt;/Directory&gt;
 </code></pre><hr>
-<pre><code>sudo ln -s <span class="regexp">/etc/</span>apache2<span class="regexp">/sites-available/</span>owncloud.conf <span class="regexp">/etc/</span>apache2<span class="regexp">/sites-enabled/</span>owncloud.conf
+<pre><code>sudo ln -s /etc/apache2/sites-available/owncloud.conf /etc/apache2/sites-enabled/owncloud.conf
 
 sudo a2enmod rewrite
 sudo a2enmod headers
@@ -122,20 +122,20 @@ sudo a2enmod env
 sudo a2enmod dir
 sudo a2enmod mime
 
-sudo chown -R www-<span class="string">data:</span>www-data <span class="regexp">/var/</span>www<span class="regexp">/owncloud/</span>
-</code></pre><h3 id="Start_service">Start service</h3><pre><code>sudo <span class="keyword">service</span> apache2 <span class="literal">restart</span>
-</code></pre><h3 id="Finish_the_installation">Finish the installation</h3><p>Open the url “<em><a href="http://**{your_machine_host}**/owncloud/" target="_blank" rel="external">http://**{your_machine_host}**/owncloud/</a></em>“ with a browser and type below.</p>
+sudo chown -R www-data:www-data /var/www/owncloud/
+</code></pre><h3 id="Start-service"><a href="#Start-service" class="headerlink" title="Start service"></a>Start service</h3><pre><code>sudo service apache2 restart
+</code></pre><h3 id="Finish-the-installation"><a href="#Finish-the-installation" class="headerlink" title="Finish the installation"></a>Finish the installation</h3><p>Open the url “_<a href="http://**{your_machine_host}**/owncloud/_" target="_blank" rel="external">http://**{your_machine_host}**/owncloud/_</a>“ with a browser and type below.</p>
 <p>Administrator info:</p>
-<pre><code><span class="attribute">user</span>: <span class="string">  admin</span>
-<span class="attribute">password</span>: <span class="string">  admin</span>
+<pre><code>user:   admin
+password:   admin
 </code></pre><p>Data dir info:</p>
-<pre><code><span class="regexp">/var/</span>www<span class="regexp">/owncloud/</span>data
+<pre><code>/var/www/owncloud/data
 </code></pre><p>Database info:</p>
-<pre><code><span class="attribute">user</span>: <span class="string">  root (only root required)</span>
-<span class="attribute">password</span>: <span class="string">  root</span>
-<span class="attribute">database</span>: <span class="string">  owncloud</span>
-<span class="attribute">host</span>: <span class="string">  localhost</span>
-</code></pre><h3 id="Finish!">Finish!</h3>
+<pre><code>user:   root (only root required)
+password:   root
+database:   owncloud
+host:   localhost
+</code></pre><h3 id="Finish"><a href="#Finish" class="headerlink" title="Finish!"></a>Finish!</h3>
       
     </div>
     <footer>
@@ -241,7 +241,7 @@ sudo chown -R www-<span class="string">data:</span>www-data <span class="regexp"
 	<ul class="entry">
 	  
         
-        <li><a href="/archives/2016/08/">八月 2016</a><small>2</small></li>
+        <li><a href="/archives/2016/08/">八月 2016</a><small>3</small></li>
       
         
         <li><a href="/archives/2015/07/">七月 2015</a><small>2</small></li>
@@ -259,6 +259,10 @@ sudo chown -R www-<span class="string">data:</span>www-data <span class="regexp"
   <ul class="entry">
     
       <li>
+        <a href="/2016/08/29/十二日游/">十二日游</a>
+      </li>
+    
+      <li>
         <a href="/2016/08/17/installing-owncloud-on-ubuntumate-raspberrypi/">Installing OwnCloud on UbuntuMate RaspberryPi</a>
       </li>
     
@@ -272,10 +276,6 @@ sudo chown -R www-<span class="string">data:</span>www-data <span class="regexp"
     
       <li>
         <a href="/2015/07/08/400-bad-request-from-aliyun-oss-with-xutils/">使用 xUtils 上传文件至阿里云 OSS 时遇到的错误</a>
-      </li>
-    
-      <li>
-        <a href="/2015/06/18/how-to-generate-access-control-signature-for-aliyun-oss/">如何生成阿里云 OSS 访问控制签名</a>
       </li>
     
   </ul>

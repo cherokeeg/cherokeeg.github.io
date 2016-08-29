@@ -6,7 +6,7 @@
   <title>How to Use GitHub Pages and Hexo to Build a Blog | Newborn, Nymph</title>
   <meta name="author" content="Cherokee G">
   
-  <meta name="description" content="1. Install Nodejs, npm and GitIn Mac, download Nodejs and Git from their offical website. And Nodejs contains npm already.https://nodejs.orghttps://gi">
+  <meta name="description" content="###1. Install Nodejs, npm and GitIn Mac, download Nodejs and Git from their offical website. And Nodejs contains npm already.https://nodejs.orghttps:/">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -71,18 +71,18 @@
     </header>
     <div class="entry">
       
-        <h3 id="1-_Install_Nodejs,_npm_and_Git">1. Install Nodejs, npm and Git</h3><p>In Mac, download Nodejs and Git from their offical website. And Nodejs contains npm already.<br><a href="https://nodejs.org" target="_blank" rel="external">https://nodejs.org</a><br><a href="https://git-scm.com" target="_blank" rel="external">https://git-scm.com</a><br>In Ubuntu you can install by apt-get.<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ apt-get install nodejs</span><br><span class="line">$ apt-get install npm</span><br><span class="line">$ apt-get install git</span><br></pre></td></tr></table></figure></p>
-<h3 id="2-_Install_Hexo">2. Install Hexo</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
-<p>I want to use GitHub for remote host, so also need to install this plugin:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure></p>
-<h3 id="3-_Setup_Hexo">3. Setup Hexo</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ hexo init &#123;folder&#125;</span><br><span class="line">$ <span class="built_in">cd</span> &#123;folder&#125;</span><br><span class="line">$ npm install</span><br></pre></td></tr></table></figure>
-<h3 id="4-_Configuration">4. Configuration</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ vi _config.yml</span><br><span class="line"><span class="comment"># Deployment</span></span><br><span class="line"><span class="comment">## Docs: http://hexo.io/docs/deployment.html</span></span><br><span class="line">deploy:</span><br><span class="line">  <span class="built_in">type</span>: git</span><br><span class="line">  repo: https://github.com/&#123;username&#125;/&#123;username&#125;.github.io.git</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
-<h3 id="5-_Start_for_a_test">5. Start for a test</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+        <p>###1. Install Nodejs, npm and Git<br>In Mac, download Nodejs and Git from their offical website. And Nodejs contains npm already.<br><a href="https://nodejs.org" target="_blank" rel="external">https://nodejs.org</a><br><a href="https://git-scm.com" target="_blank" rel="external">https://git-scm.com</a><br>In Ubuntu you can install by apt-get.<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ apt-get install nodejs</div><div class="line">$ apt-get install npm</div><div class="line">$ apt-get install git</div></pre></td></tr></table></figure></p>
+<p>###2. Install Hexo<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ npm install -g hexo-cli</div></pre></td></tr></table></figure></p>
+<p>I want to use GitHub for remote host, so also need to install this plugin:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ npm install hexo-deployer-git --save</div></pre></td></tr></table></figure></p>
+<p>###3. Setup Hexo<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ hexo init &#123;folder&#125;</div><div class="line">$ <span class="built_in">cd</span> &#123;folder&#125;</div><div class="line">$ npm install</div></pre></td></tr></table></figure></p>
+<p>###4. Configuration<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$ vi _config.yml</div><div class="line"><span class="comment"># Deployment</span></div><div class="line"><span class="comment">## Docs: http://hexo.io/docs/deployment.html</span></div><div class="line">deploy:</div><div class="line">  <span class="built_in">type</span>: git</div><div class="line">  repo: https://github.com/&#123;username&#125;/&#123;username&#125;.github.io.git</div><div class="line">  branch: master</div></pre></td></tr></table></figure></p>
+<p>###5. Start for a test<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure></p>
 <p>Visit <a href="http://{your" target="_blank" rel="external">http://{your</a> IP address}:4000/ in your browser. If everything is OK, you will see it.</p>
-<h3 id="6-_Deploy_to_remote_GitHub">6. Deploy to remote GitHub</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ git config --global user.name <span class="string">"&#123;username&#125;"</span></span><br><span class="line">$ git config --global user.email <span class="string">"&#123;email&#125;"</span></span><br><span class="line">$ git config --global credential.helper store</span><br><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<p>###6. Deploy to remote GitHub<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ git config --global user.name <span class="string">"&#123;username&#125;"</span></div><div class="line">$ git config --global user.email <span class="string">"&#123;email&#125;"</span></div><div class="line">$ git config --global credential.helper store</div><div class="line">$ hexo deploy</div></pre></td></tr></table></figure></p>
 <p>The 3rd line configure makes git remember your username and password.<br>Visit <a href="http://{username}.github.io/" target="_blank" rel="external">http://{username}.github.io/</a> for test.</p>
-<h3 id="7-_Create_a_new_post">7. Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<h3 id="8-_Generate">8. Generate</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<h3 id="9-_Deploy_the_new_post_again">9. Deploy the new post again</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<p>###7. Create a new post<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure></p>
+<p>###8. Generate<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure></p>
+<p>###9. Deploy the new post again<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure></p>
 <p>OK, It’s done. Next time I will show you how to config a Hexo blog.</p>
 
       
@@ -93,7 +93,7 @@
         
   
   <div class="tags">
-    <a href="/tags/GitHub/">GitHub</a>, <a href="/tags/Hexo/">Hexo</a>
+    <a href="/tags/Hexo/">Hexo</a>, <a href="/tags/GitHub/">GitHub</a>
   </div>
 
         
@@ -190,7 +190,7 @@
 	<ul class="entry">
 	  
         
-        <li><a href="/archives/2016/08/">八月 2016</a><small>2</small></li>
+        <li><a href="/archives/2016/08/">八月 2016</a><small>3</small></li>
       
         
         <li><a href="/archives/2015/07/">七月 2015</a><small>2</small></li>
@@ -208,6 +208,10 @@
   <ul class="entry">
     
       <li>
+        <a href="/2016/08/29/十二日游/">十二日游</a>
+      </li>
+    
+      <li>
         <a href="/2016/08/17/installing-owncloud-on-ubuntumate-raspberrypi/">Installing OwnCloud on UbuntuMate RaspberryPi</a>
       </li>
     
@@ -221,10 +225,6 @@
     
       <li>
         <a href="/2015/07/08/400-bad-request-from-aliyun-oss-with-xutils/">使用 xUtils 上传文件至阿里云 OSS 时遇到的错误</a>
-      </li>
-    
-      <li>
-        <a href="/2015/06/18/how-to-generate-access-control-signature-for-aliyun-oss/">如何生成阿里云 OSS 访问控制签名</a>
       </li>
     
   </ul>
